@@ -26,10 +26,10 @@ def euclidesEstendido(a, b):
 def inversoMul(a, n):
     m, s, t = euclidesEstendido(a, n)
     if m == 1:
-        if t >= 0:
-            return t
+        if s >= 0:
+            return s
         else:
-            return n + t
+            return n + s
     else:
         return 0 # Falha
     
@@ -49,7 +49,7 @@ def Fabio():
             s = int(entrada[2])
             v = int(entrada[3])
 
-            if (s * s * v) % n == 1:
+            if (s * s * v) % n == 1 and s < n and v < n:
                 print("C")
             else:
                 print("E")
@@ -123,6 +123,7 @@ def Patricia():
             repeticoesParaConfiar = t
             repetirQ = 1
             erroQ = 0
+            identificado = 0
 
             if v > n:
                 print("E")
@@ -135,7 +136,7 @@ def Patricia():
             if repetirQ == 1:
                 x = int(entrada[1]) 
                 b = random.randint(0, 1)
-                if x > n or x == 1 or (euclidesEstendido(int(x ** (1/2)), n)[0] != 1):
+                if x > n or x == 1 or (euclidesEstendido(int(x ** (1/2)), n)[0] != 1) or x > v:
                     print("E")
                     erroQ = 1
                 else:
@@ -160,18 +161,27 @@ def Patricia():
 
             if b == 0:
                 if (xb * xb) % n == (x % n):
-                   repeticoesParaConfiar -= 1
-                   print("C ", repeticoesParaConfiar)
+                    if repeticoesParaConfiar == 0:
+                       print("E ", repeticoesParaConfiar) 
+                    else:
+                        repeticoesParaConfiar -= 1
+                        print("C ", repeticoesParaConfiar)
                 else:
                     print("E ", repeticoesParaConfiar)
+                    repeticoesParaConfiar = t
             elif b == 1:
                 if(v * xb * xb) % n == (x % n):
-                    repeticoesParaConfiar -= 1
-                    print("C ", repeticoesParaConfiar)
+                    if repeticoesParaConfiar == 0:
+                       print("E ", repeticoesParaConfiar) 
+                    else:
+                        repeticoesParaConfiar -= 1
+                        print("C ", repeticoesParaConfiar)
                 else:
                     print("E ", repeticoesParaConfiar)
+                    repeticoesParaConfiar = t
             else:
                 print("E ", repeticoesParaConfiar)
+                repeticoesParaConfiar = t
 
             if repeticoesParaConfiar == 0:
                 identificado = 1
@@ -181,23 +191,38 @@ def Patricia():
             b = int(entrada[2])
             xb = int(entrada[3])
 
+            if identificado == 1:
+                print("E ", repeticoesParaConfiar)
+                entrada = input().split(" ")
+                opcao = entrada[0]
+                continue
+
             if b == 0:
                 if (xb * xb) % n == (x % n):
-                   repeticoesParaConfiar -= 1
-                   print("C ", repeticoesParaConfiar)
+                    if repeticoesParaConfiar == 0:
+                       print("E ", repeticoesParaConfiar) 
+                    else:
+                        repeticoesParaConfiar -= 1
+                        print("C ", repeticoesParaConfiar)
                 else:
-                    repeticoesParaConfiar = t
                     print("E ", repeticoesParaConfiar)
+                    repeticoesParaConfiar = t
             elif b == 1:
                 if(v * xb * xb) % n == (x % n):
-                    repeticoesParaConfiar -= 1
-                    print("C ", repeticoesParaConfiar)
+                    if repeticoesParaConfiar == 0:
+                       print("E ", repeticoesParaConfiar) 
+                    else:
+                        repeticoesParaConfiar -= 1
+                        print("C ", repeticoesParaConfiar)
                 else:
-                    repeticoesParaConfiar = t
                     print("E ", repeticoesParaConfiar)
+                    repeticoesParaConfiar = t
             else:
-                repeticoesParaConfiar = t
                 print("E ", repeticoesParaConfiar)
+                repeticoesParaConfiar = t
+
+            if repeticoesParaConfiar == 0:
+                identificado = 1
         elif opcao == "T":
             print("C")
             break
@@ -226,8 +251,11 @@ def Teodoro():
             print("C ", v, s)
         elif opcao == "F":
             s = int(entrada[1])
-            v = inversoMul((s*s) % n, n) # nao funciona por algum motivo
-            print("C ", v)
+            v = inversoMul((s*s) % n, n) 
+            if v == 0 or s >= n or s == 0:
+                print("E")
+            else:
+                print("C ", v)
         elif opcao == "T":
             print("C")
             break
@@ -246,13 +274,31 @@ def Ester():
             n = int(entrada[1])
             v = int(entrada[2])
 
-            print("C")
+            if v > n:
+                print("E")
+            else:
+                print("C")
         elif opcao == "P":
             b = int(entrada[1])
-            pass
-        elif opcao == "S":
+            
+            if b == 0:
+                xb = random.randint(1, n)
+                x = (xb ** 2) % n
+                print("C", xb, x)
+            elif b == 1:
+                xb = random.randint(1, n)    
+                x =( xb ** 2 * v )% n
+                print("C", xb, x)
 
-            pass
+        elif opcao == "S":
+            x1 = int(entrada[1])
+            x2 = int(entrada[2])
+
+            if x1 > n or x2 > n:
+                print("E")
+            else:
+                s = x2 * inversoMul(x1, n) % n
+                print("C ", s)
         elif opcao == "T":
             print("C")
             break
@@ -274,11 +320,3 @@ if len(sys.argv) > 1:
 
 else:
     print("Identifique quem está executando.")
-
-
-    
-                
-
-
-
-
